@@ -6,6 +6,8 @@ import (
 )
 
 func main() {
+
+	// Let the world know we are alive
 	fmt.Println("Hello, world!")
 
 	http.HandleFunc("/", handleHome)
@@ -15,12 +17,16 @@ func main() {
 	http.ListenAndServe(":1233", nil)
 }
 
+// handleHome returns the html of our home page to the person making
+// the request.
 func handleHome(w http.ResponseWriter, r *http.Request) {
 
 	index := defaultIndex()
 	fmt.Fprint(w, index)
 }
 
+// defaultIndex returns a very simple but complete static website
+// as the index file for this program.
 func defaultIndex() string {
 	str := `
 <!doctype html>

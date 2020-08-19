@@ -10,7 +10,7 @@ devices controlled by a Raspberry PI.
 % go build
 ```
 
-## Run
+## Serve HTML Websites 
 
 To run the static website directly from memory do this:
 
@@ -27,4 +27,9 @@ an index.html file in it, we can serve that up like this:
 
 That should produce a website that looks like: (Todo put a screen
 shoot of our super simple static website).
+
+## REST API
+
+- GET /api/health
+
 

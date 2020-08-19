@@ -25,6 +25,6 @@ func main() {
 	// Let the world know we are alive
 	fmt.Println("Web starting at", config.Addr)
 
-	// Go web!
+	// Go web! Found in web.go
 	web(config.Addr, config.Pub)
 }

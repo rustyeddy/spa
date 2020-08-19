@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"fmt"
+	"log"
 )
 
 type Configuration struct {
@@ -23,7 +23,7 @@ func main() {
 	flag.Parse()
 
 	// Let the world know we are alive
-	fmt.Println("Web starting at", config.Addr)
+	log.Println("Web starting at", config.Addr)
 
 	// Go web! Found in web.go
 	web(config.Addr, config.Pub)

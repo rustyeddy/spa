@@ -35,7 +35,7 @@ func defaultIndex() string {
   </head>
   <body>
     <h1>Hello, World!</h1>
-    <p>This is an very simple static web page.</p>
+    <p>This is a static page from memory.</p>
   </body>
 </html>`
 	return str

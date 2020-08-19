@@ -27,11 +27,13 @@ func web(addr, path string) {
 // handleHome returns the html of our home page to the person making
 // the request.
 func handleHome(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
 	index := defaultIndex()
 	fmt.Fprint(w, index)
 }
 
 func handleHealth(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(Health{"ok"})
 }
 

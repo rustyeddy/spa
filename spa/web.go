@@ -7,6 +7,7 @@ import (
 
 var (
 	health Health
+	ws     wsServer
 )
 
 type Server struct {
@@ -22,6 +23,7 @@ func web(addr, path string) {
 		http.Handle("/", http.FileServer(http.Dir(path)))
 	}
 
+	http.Handle("/ws", ws)
 	http.Handle("/api/health", health)
 	http.ListenAndServe(addr, nil)
 }

@@ -1,13 +1,16 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 )
 
-type Health struct {
-	Health string `json:"health"`
+var (
+	health Health
+	ws     wsServer
+)
+
+type Server struct {
 }
 
 func web(addr, path string) {
@@ -20,7 +23,8 @@ func web(addr, path string) {
 		http.Handle("/", http.FileServer(http.Dir(path)))
 	}
 
-	http.HandleFunc("/api/health", handleHealth)
+	http.Handle("/ws", ws)
+	http.Handle("/api/health", health)
 	http.ListenAndServe(addr, nil)
 }
 
@@ -30,11 +34,6 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	index := defaultIndex()
 	fmt.Fprint(w, index)
-}
-
-func handleHealth(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(Health{"ok"})
 }
 
 // defaultIndex returns a very simple but complete static website

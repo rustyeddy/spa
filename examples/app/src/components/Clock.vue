@@ -29,9 +29,13 @@
 </script>
 
 <style :scoped>
+ body {
+     background: black;
+ }
+ 
  h1 {
      font-size: 96px;
      color: #2085a3;
-     background: black;
+
  }
 </style>

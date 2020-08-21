@@ -2,9 +2,7 @@
   <v-container>
     <v-row class="text-center">
       <v-col cols="12">
-
-          {{ datestr }}
-
+          <h1>{{ datestr }}</h1>
       </v-col>
     </v-row>
   </v-container>
@@ -21,9 +19,19 @@
      computed: {
          datestr() {
              var time = new Date();
-             var timestr = time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds();
+             var timestr = time.getHours() + ":" +
+                           time.getMinutes() + ":" +
+                           time.getSeconds();
              return timestr
          }   
      }
  }
 </script>
+
+<style :scoped>
+ h1 {
+     font-size: 96px;
+     color: #2085a3;
+     background: black;
+ }
+</style>

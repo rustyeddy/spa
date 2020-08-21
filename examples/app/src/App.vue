@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <v-main>
-            <Clock/>
+            <Clock/>                    
         </v-main>
     </v-app>
 </template>

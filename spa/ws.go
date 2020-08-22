@@ -15,8 +15,16 @@ type wsServer struct {
 }
 
 func (ws wsServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+
+	// Take care of CORS
+	log.Println("Warning Cors Header to '*'")
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	c, err := websocket.Accept(w, r, &websocket.AcceptOptions{
-		Subprotocols: []string{"echo"},
+		Subprotocols:       []string{"echo"},
+		InsecureSkipVerify: true,
+		// OriginPatterns: ["*"],
 	})
 	if err != nil {
 		log.Println("ERROR ", err)

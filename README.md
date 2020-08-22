@@ -33,3 +33,17 @@ shoot of our super simple static website).
 - GET /api/health
 
 
+## Web Socket
+
+We have a websocket connected between our app and the server. We'll merge this branch then work on adding components that communicate over the websocket.
+
+All websocket communications are JSON formatted for easy debugging and processing. In heavy scenarios a binary version may fair better such as Protocol Buffers or TLV.
+
+### Supported message types
+
+- echo (client sends string to server, server echos string back to client)
+
+### TODO Implement
+
+- time (server sends client time structs periodically)
+- quote (client enters quote in form, quote sent to server and recorded)

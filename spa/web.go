@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -25,7 +26,8 @@ func web(addr, path string) {
 
 	http.Handle("/ws", ws)
 	http.Handle("/api/health", health)
-	http.ListenAndServe(addr, nil)
+	err := http.ListenAndServe(addr, nil)
+	log.Fatal(err)
 }
 
 // handleHome returns the html of our home page to the person making

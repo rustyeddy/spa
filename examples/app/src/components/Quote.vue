@@ -2,7 +2,8 @@
   <v-container>
     <v-row class="text-center">
       <v-col cols="12">
-          <h1>{{ datestr }}</h1>
+          <p>{{ quote }}</p>
+          <h3>{{ author }}</h3>
       </v-col>
     </v-row>
   </v-container>
@@ -10,10 +11,11 @@
 
 <script>
  export default {
-     name: 'Clock',
+     name: 'Quote',
      data() {
          return {
-             datetime: "10:10 10/10/2020"
+             quote: "Why can't we all just get along?",
+             author: "Rodney King"
          }
      },
      computed: {

@@ -8,7 +8,6 @@ import (
 
 var (
 	health Health
-	ws     wsServer
 )
 
 type Server struct {

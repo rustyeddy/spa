@@ -9,17 +9,30 @@ import (
 	"time"
 
 	"nhooyr.io/websocket"
+	"nhooyr.io/websocket/wsjson"
 )
 
 type wsServer struct {
+	Q chan string
+}
+
+type TimeMsg struct {
+	Timestr string `json:"time"`
+	Action  string `json:"action"`
+}
+
+// NewWsServer creates a new webssocket server
+func newWsServer() (ws *wsServer) {
+	ws = &wsServer{}
+	return ws
 }
 
 func (ws wsServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// Take care of CORS
 	log.Println("Warning Cors Header to '*'")
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
+	//w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	//w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	c, err := websocket.Accept(w, r, &websocket.AcceptOptions{
 		Subprotocols:       []string{"echo"},
@@ -33,14 +46,18 @@ func (ws wsServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	defer c.Close(websocket.StatusInternalError, "houston, we have a problem")
 
-	if c.Subprotocol() == "echo" {
-		//c.Close(websocket.StatusPolicyViolation, "we are demanding the client speak echo!")
-		fmt.Println("The client speaks ECHO!!!")
+	for now := range time.Tick(time.Minute) {
+
+		t := &TimeMsg{
+			Timestr: now.String(),
+			Action:  "time",
+		}
+		err := wsjson.Write(r.Context(), c, t)
+		if err != nil {
+			log.Println("ERROR: ", err)
+		}
 	}
 
-	for {
-		err = echo(r.Context(), c)
-	}
 }
 
 func echo(ctx context.Context, c *websocket.Conn) error {

@@ -47,3 +47,4 @@ All websocket communications are JSON formatted for easy debugging and processin
 
 - time (server sends client time structs periodically)
 - quote (client enters quote in form, quote sent to server and recorded)
+

@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+
         time: {
             year: 0,
             month: 0,
@@ -20,6 +21,7 @@ export default new Vuex.Store({
         }
     },
     mutations: {
+
         SOCKET_ONOPEN(state, event)  {
             console.log("ONOPEN: ", event)
             state.socket.isConnected = true
@@ -42,6 +44,7 @@ export default new Vuex.Store({
         SOCKET_RECONNECT_ERROR(state) {
             state.socket.reconnectError = true;
         },
+
         SET_TIME(state, t) {
             console.log("before year: ", t)
             state.time.year = t.year

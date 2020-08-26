@@ -22,8 +22,9 @@ export default new Vuex.Store({
             state.socket.isConnected = false
         },
         SOCKET_ONMESSAGE(state, event) {
-            console.log("ONMESSAGE", event)
-            state.socket.message = event;
+            console.log("ONMESSAGE", event.data)
+            state.socket.message = event.data;
+            console.log("message: ", state.socket.message)
         },
         SOCKET_ONERROR(state, event)  {
             console.error(state, event)
@@ -39,8 +40,9 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        handleTimeChange: function({ dispatch }, msg) {
-            dispatch('settime', msg)
+        setTime({ commit }, msg) {
+            console.log("setTime: ", msg)
+            commit('SET_TIME', msg.time)
         }
     },
     modules: {

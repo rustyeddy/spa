@@ -46,18 +46,19 @@ func (ws wsServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	defer c.Close(websocket.StatusInternalError, "houston, we have a problem")
 
-	for now := range time.Tick(time.Minute) {
-
+	log.Println("Wait a minute...")
+	for now := range time.Tick(time.Second * 10) {
 		t := &TimeMsg{
 			Timestr: now.String(),
-			Action:  "time",
+			Action:  "setTime",
 		}
-		err := wsjson.Write(r.Context(), c, t)
+
+		log.Printf("Sending the time %v", t)
+		err = wsjson.Write(r.Context(), c, t)
 		if err != nil {
 			log.Println("ERROR: ", err)
 		}
 	}
-
 }
 
 func echo(ctx context.Context, c *websocket.Conn) error {

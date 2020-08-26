@@ -2,7 +2,8 @@
   <v-container>
     <v-row class="text-center">
       <v-col cols="12">
-          <h1>{{ datestr }}</h1>
+          <h1>{{ hour }}:{{ minute }}</h1>
+          <h2>{{ month }}/{{ day }}/{{ year }}</h2>
       </v-col>
     </v-row>
   </v-container>
@@ -11,19 +12,28 @@
 <script>
  export default {
      name: 'Clock',
-     data() {
-         return {
-             datetime: "10:10 10/10/2020"
-         }
-     },
      computed: {
-         datestr() {
-             var time = new Date();
-             var timestr = time.getHours() + ":" +
-                           time.getMinutes() + ":" +
-                           time.getSeconds();
-             return timestr
-         }   
+         year() {
+             return this.$store.state.time.year
+         },
+         month() {
+             return this.$store.state.time.month
+         },
+         day() {
+             return this.$store.state.time.day
+         },
+         hour() {
+             return this.$store.state.time.hour
+         },
+         minute() {
+             return this.$store.state.time.minute
+         },
+         second() {
+             return this.$store.state.time.second
+         },
+         timeStr() {
+             return this.$store.state.time
+         }
      }
  }
 </script>

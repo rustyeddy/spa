@@ -42,8 +42,9 @@ All websocket communications are JSON formatted for easy debugging and processin
 ### Supported message types
 
 - echo (client sends string to server, server echos string back to client)
+- time (server sends client time structs periodically)
 
 ### TODO Implement
 
-- time (server sends client time structs periodically)
 - quote (client enters quote in form, quote sent to server and recorded)
+

@@ -5,7 +5,14 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        time: "",
+        time: {
+            year: 0,
+            month: 0,
+            day: 0,
+            hour: 0,
+            minute: 0,
+            second: 0,
+        },
         socket: {
             isConnected: false,
             message: '',
@@ -36,13 +43,20 @@ export default new Vuex.Store({
             state.socket.reconnectError = true;
         },
         SET_TIME(state, t) {
-            state.time = t
+            console.log("before year: ", t)
+            state.time.year = t.year
+            console.log("after year")
+            state.time.month = t.month
+            state.time.day = t.day
+            state.time.hour = t.hour
+            state.time.minute = t.minute
+            state.time.second = t.second
         }
     },
     actions: {
         setTime({ commit }, msg) {
             console.log("setTime: ", msg)
-            commit('SET_TIME', msg.time)
+            commit('SET_TIME', msg)
         }
     },
     modules: {

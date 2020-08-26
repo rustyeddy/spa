@@ -16,11 +16,6 @@ type wsServer struct {
 	Q chan string
 }
 
-type TimeMsg struct {
-	Timestr string `json:"time"`
-	Action  string `json:"action"`
-}
-
 // NewWsServer creates a new webssocket server
 func newWsServer() (ws *wsServer) {
 	ws = &wsServer{}
@@ -48,12 +43,9 @@ func (ws wsServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Wait a minute...")
 	for now := range time.Tick(time.Second * 10) {
-		t := &TimeMsg{
-			Timestr: now.String(),
-			Action:  "setTime",
-		}
+		t := NewTimeMsg(now)
 
-		log.Printf("Sending the time %v", t)
+		log.Printf("Sending the time %+v", t)
 		err = wsjson.Write(r.Context(), c, t)
 		if err != nil {
 			log.Println("ERROR: ", err)

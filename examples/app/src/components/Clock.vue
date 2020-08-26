@@ -2,7 +2,8 @@
   <v-container>
     <v-row class="text-center">
       <v-col cols="12">
-          <h1>{{ timeStr  }}</h1>
+          <h1>{{ hour }}:{{ minute }}</h1>
+          <h2>{{ month }}/{{ day }}/{{ year }}</h2>
       </v-col>
     </v-row>
   </v-container>
@@ -12,6 +13,24 @@
  export default {
      name: 'Clock',
      computed: {
+         year() {
+             return this.$store.state.time.year
+         },
+         month() {
+             return this.$store.state.time.month
+         },
+         day() {
+             return this.$store.state.time.day
+         },
+         hour() {
+             return this.$store.state.time.hour
+         },
+         minute() {
+             return this.$store.state.time.minute
+         },
+         second() {
+             return this.$store.state.time.second
+         },
          timeStr() {
              return this.$store.state.time
          }

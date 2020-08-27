@@ -5,14 +5,6 @@ import (
 	"net/http"
 )
 
-var (
-	health Health
-	quote  Quote
-)
-
-type Server struct {
-}
-
 func web(addr, path string) {
 
 	// if our path is null we will return our in memory static
@@ -23,9 +15,9 @@ func web(addr, path string) {
 		http.Handle("/", http.FileServer(http.Dir(path)))
 	}
 
-	http.Handle("/ws", ws)
+	http.Handle("/ws", wserv)
 	http.Handle("/api/health", health)
-	http.Handle("/api/quote", quote)
+	http.Handle("/api/quote", theQuote)
 
 	err := http.ListenAndServe(addr, nil)
 	log.Fatal(err)

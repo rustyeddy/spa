@@ -13,14 +13,12 @@ import (
 )
 
 type wsServer struct {
-	Q chan string
 }
 
-// NewWsServer creates a new webssocket server
-func newWsServer() (ws *wsServer) {
-	ws = &wsServer{}
-	return ws
-}
+var (
+	wserv wsServer
+	wsQ   chan interface{}
+)
 
 func (ws wsServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
@@ -38,24 +36,55 @@ func (ws wsServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		log.Println("ERROR ", err)
 		return
 	}
-
 	defer c.Close(websocket.StatusInternalError, "houston, we have a problem")
+
+	// set up the channel and start listening
+	wsQ = make(chan interface{})
+	defer close(wsQ)
 
 	log.Println("Wait a minute...")
 	tQ := time.Tick(time.Second * 10)
-	for {
-		select {
-		case now := <-tQ:
-			t := NewTimeMsg(now)
 
-			log.Printf("Sending the time %+v", t)
-			err = wsjson.Write(r.Context(), c, t)
-			if err != nil {
-				log.Println("ERROR: ", err)
+	go func() {
+		for {
+
+			log.Printf("ws Getting our Select on [waiting for incoming ...] %d", len(wsQ))
+			select {
+			case now := <-tQ:
+				t := NewTimeMsg(now)
+
+				log.Printf("Sending the time %+v", t)
+				err = wsjson.Write(r.Context(), c, t)
+				if err != nil {
+					log.Println("ERROR: ", err)
+				}
+
+			case msg := <-wsQ:
+				log.Println("ws [IN] message: ", msg)
+				err = wsjson.Write(r.Context(), c, msg)
+				if err != nil {
+					log.Println("ERROR: ", err)
+				}
 			}
-
 		}
+	}()
+
+	for {
+		data := make([]byte, 8192)
+		_, data, err := c.Read(r.Context())
+		if err != nil {
+			log.Fatal("ERROR: reading websocket ", err)
+		}
+		log.Println("incoming: %s", string(data))
 	}
+
+}
+
+func (ws *wsServer) SendMsg(msg interface{}) {
+	if wsQ == nil {
+		log.Fatal("Q has not been initialize")
+	}
+	wsQ <- msg
 }
 
 func echo(ctx context.Context, c *websocket.Conn) error {

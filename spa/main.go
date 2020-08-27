@@ -12,7 +12,6 @@ type Configuration struct {
 
 var (
 	config Configuration
-	ws     *wsServer
 )
 
 func init() {
@@ -27,6 +26,5 @@ func main() {
 	log.Println("Web starting at", config.Addr)
 
 	// Go web! Found in web.go
-	ws = newWsServer()
 	web(config.Addr, config.Pub)
 }

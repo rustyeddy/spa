@@ -2,7 +2,8 @@
   <v-container>
     <v-row class="text-center">
       <v-col cols="12">
-          <p>{{ quote }}</p>
+          <p>{{ text }}</p>
+          <h4>{{ title }}</h4>
           <h3>{{ author }}</h3>
       </v-col>
     </v-row>
@@ -12,20 +13,16 @@
 <script>
  export default {
      name: 'Quote',
-     data() {
-         return {
-             quote: "Why can't we all just get along?",
-             author: "Rodney King"
-         }
-     },
      computed: {
-         datestr() {
-             var time = new Date();
-             var timestr = time.getHours() + ":" +
-                           time.getMinutes() + ":" +
-                           time.getSeconds();
-             return timestr
-         }   
+         text() {
+             return this.$store.state.quote.text
+         },
+         title() {
+             return this.$store.state.quote.title
+         },
+         author() {
+             return this.$store.state.quote.author
+         }
      }
  }
 </script>

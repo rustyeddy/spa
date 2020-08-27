@@ -13,23 +13,20 @@ import (
 )
 
 type wsServer struct {
+	c websocket.Conn
 }
 
 var (
 	wserv wsServer
-	wsQ   chan interface{}
 )
 
+// ServeHTTP
 func (ws wsServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
-	// Take care of CORS
 	log.Println("Warning Cors Header to '*'")
-	//w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	//w.Header().Set("Access-Control-Allow-Origin", "*")
-
 	c, err := websocket.Accept(w, r, &websocket.AcceptOptions{
 		Subprotocols:       []string{"echo"},
-		InsecureSkipVerify: true,
+		InsecureSkipVerify: true, // Take care of CORS
 		// OriginPatterns: ["*"],
 	})
 	if err != nil {
@@ -38,33 +35,37 @@ func (ws wsServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	defer c.Close(websocket.StatusInternalError, "houston, we have a problem")
 
-	// set up the channel and start listening
-	wsQ = make(chan interface{})
-	defer close(wsQ)
-
 	log.Println("Wait a minute...")
-	tQ := time.Tick(time.Second * 10)
+	tQ := time.Tick(time.Second)
 
-	go func() {
+	cb := func(q Quote) {
+		c1 := c
+		q1 := q
+
+		log.Println("ws [IN] message: ", q1)
+		err = wsjson.Write(r.Context(), c1, q1)
+		if err != nil {
+			log.Println("ERROR: ", err)
+		}
+	}
+	quoteCallbacks[c] = cb
+
+	defer func() { delete(quoteCallbacks, c) }()
+	func() {
 		for {
 
-			log.Printf("ws Getting our Select on [waiting for incoming ...] %d", len(wsQ))
 			select {
 			case now := <-tQ:
 				t := NewTimeMsg(now)
 
-				log.Printf("Sending the time %+v", t)
+				if config.Debug {
+					log.Printf("Sending the time %+v", t)
+				}
 				err = wsjson.Write(r.Context(), c, t)
 				if err != nil {
 					log.Println("ERROR: ", err)
 				}
 
-			case msg := <-wsQ:
-				log.Println("ws [IN] message: ", msg)
-				err = wsjson.Write(r.Context(), c, msg)
-				if err != nil {
-					log.Println("ERROR: ", err)
-				}
 			}
 		}
 	}()
@@ -72,19 +73,17 @@ func (ws wsServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	for {
 		data := make([]byte, 8192)
 		_, data, err := c.Read(r.Context())
+		if websocket.CloseStatus(err) == websocket.StatusNormalClosure {
+			log.Println("ws Closed")
+			return
+		}
 		if err != nil {
-			log.Fatal("ERROR: reading websocket ", err)
+			log.Println("ERROR: reading websocket ", err)
+			return
 		}
 		log.Println("incoming: %s", string(data))
 	}
 
-}
-
-func (ws *wsServer) SendMsg(msg interface{}) {
-	if wsQ == nil {
-		log.Fatal("Q has not been initialize")
-	}
-	wsQ <- msg
 }
 
 func echo(ctx context.Context, c *websocket.Conn) error {

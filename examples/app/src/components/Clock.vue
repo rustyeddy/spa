@@ -2,7 +2,7 @@
   <v-container>
     <v-row class="text-center">
       <v-col cols="12">
-          <h1>{{ hour }}:{{ minute }}</h1>
+          <h1>{{ hour }}:{{ minute }}:{{ second }}</h1>
           <h2>{{ month }}/{{ day }}/{{ year }}</h2>
       </v-col>
     </v-row>

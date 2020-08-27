@@ -6,10 +6,13 @@ import (
 	"log"
 	"net/http"
 	"strings"
+
+	"nhooyr.io/websocket"
 )
 
 var (
-	theQuote Quote
+	theQuote       Quote
+	quoteCallbacks map[*websocket.Conn]func(q Quote)
 )
 
 type Quote struct {
@@ -20,6 +23,7 @@ type Quote struct {
 }
 
 func init() {
+	quoteCallbacks = make(map[*websocket.Conn]func(q Quote))
 	theQuote = Quote{
 		Author: "Rodney King",
 		Title:  "",
@@ -32,7 +36,6 @@ func (q Quote) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	r.ParseForm()
-
 	switch r.Method {
 	case "GET":
 		json.NewEncoder(w).Encode(theQuote)
@@ -74,7 +77,9 @@ func (q Quote) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 
 		log.Println("Sending the quote to Websocket")
-		wsQ <- theQuote
-	}
 
+		for _, cb := range quoteCallbacks {
+			cb(theQuote)
+		}
+	}
 }

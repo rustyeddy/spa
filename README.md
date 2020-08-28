@@ -30,8 +30,11 @@ shoot of our super simple static website).
 
 ## REST API
 
+```
 - GET /api/health
-
+- GET /api/quote
+- POST /api/quote?title=xxxx&author=yyyy&text=zzzzz
+```
 
 ## Web Socket
 

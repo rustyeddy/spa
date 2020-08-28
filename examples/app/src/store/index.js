@@ -5,7 +5,6 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-
         time: {
             year: 0,
             month: 0,
@@ -13,6 +12,11 @@ export default new Vuex.Store({
             hour: 0,
             minute: 0,
             second: 0,
+        },
+        quote: {
+            title: "",
+            text: "Why can't we all just get along?",
+            author: "Rodney King"
         },
         socket: {
             isConnected: false,
@@ -46,20 +50,29 @@ export default new Vuex.Store({
         },
 
         SET_TIME(state, t) {
-            console.log("before year: ", t)
             state.time.year = t.year
-            console.log("after year")
             state.time.month = t.month
             state.time.day = t.day
             state.time.hour = t.hour
             state.time.minute = t.minute
             state.time.second = t.second
+        },
+
+        SET_QUOTE(state, q) {
+            state.quote.title = q.title
+            state.quote.author = q.author
+            state.quote.text = q.text
         }
     },
     actions: {
         setTime({ commit }, msg) {
             console.log("setTime: ", msg)
             commit('SET_TIME', msg)
+        },
+
+        setQuote({ commit }, msg) {
+            console.log("setQuote: ", msg)
+            commit('SET_QUOTE', msg)
         }
     },
     modules: {

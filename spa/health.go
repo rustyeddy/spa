@@ -5,6 +5,10 @@ import (
 	"net/http"
 )
 
+var (
+	health Health = Health{true}
+)
+
 type Health struct {
 	Status bool `json:"status"`
 }

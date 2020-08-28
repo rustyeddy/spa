@@ -6,16 +6,17 @@ import (
 )
 
 type Configuration struct {
-	Addr string // Address we will serve from
-	Pub  string // path we will publish
+	Addr  string // Address we will serve from
+	Debug bool
+	Pub   string // path we will publish
 }
 
 var (
 	config Configuration
-	ws     *wsServer
 )
 
 func init() {
+	flag.BoolVar(&config.Debug, "debug", false, "turn on debugging")
 	flag.StringVar(&config.Addr, "addr", ":1233", "address string to serve up")
 	flag.StringVar(&config.Pub, "pub", "", "path of website to serve up")
 }
@@ -27,6 +28,5 @@ func main() {
 	log.Println("Web starting at", config.Addr)
 
 	// Go web! Found in web.go
-	ws = newWsServer()
 	web(config.Addr, config.Pub)
 }

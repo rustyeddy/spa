@@ -13,44 +13,77 @@ import (
 )
 
 type wsServer struct {
-	Q chan string
+	c websocket.Conn
 }
 
-// NewWsServer creates a new webssocket server
-func newWsServer() (ws *wsServer) {
-	ws = &wsServer{}
-	return ws
-}
+var (
+	wserv wsServer
+)
 
+// ServeHTTP
 func (ws wsServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
-	// Take care of CORS
 	log.Println("Warning Cors Header to '*'")
-	//w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	//w.Header().Set("Access-Control-Allow-Origin", "*")
-
 	c, err := websocket.Accept(w, r, &websocket.AcceptOptions{
 		Subprotocols:       []string{"echo"},
-		InsecureSkipVerify: true,
+		InsecureSkipVerify: true, // Take care of CORS
 		// OriginPatterns: ["*"],
 	})
 	if err != nil {
 		log.Println("ERROR ", err)
 		return
 	}
-
 	defer c.Close(websocket.StatusInternalError, "houston, we have a problem")
 
 	log.Println("Wait a minute...")
-	for now := range time.Tick(time.Second * 10) {
-		t := NewTimeMsg(now)
+	tQ := time.Tick(time.Second)
 
-		log.Printf("Sending the time %+v", t)
-		err = wsjson.Write(r.Context(), c, t)
+	cb := func(q Quote) {
+		c1 := c
+		q1 := q
+
+		log.Println("ws [IN] message: ", q1)
+		err = wsjson.Write(r.Context(), c1, q1)
 		if err != nil {
 			log.Println("ERROR: ", err)
 		}
 	}
+	quoteCallbacks[c] = cb
+
+	defer func() { delete(quoteCallbacks, c) }()
+	func() {
+		for {
+
+			select {
+			case now := <-tQ:
+				t := NewTimeMsg(now)
+
+				if config.Debug {
+					log.Printf("Sending the time %+v", t)
+				}
+				err = wsjson.Write(r.Context(), c, t)
+				if err != nil {
+					log.Println("ERROR: ", err)
+				}
+
+			}
+		}
+	}()
+
+	for {
+		data := make([]byte, 8192)
+		_, data, err := c.Read(r.Context())
+		if websocket.CloseStatus(err) == websocket.StatusNormalClosure {
+			log.Println("ws Closed")
+			return
+		}
+		if err != nil {
+			log.Println("ERROR: reading websocket ", err)
+			return
+		}
+		log.Println("incoming: %s", string(data))
+	}
+
 }
 
 func echo(ctx context.Context, c *websocket.Conn) error {

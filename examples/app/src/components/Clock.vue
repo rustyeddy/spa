@@ -14,25 +14,25 @@
      name: 'Clock',
      computed: {
          year() {
-             return this.$store.state.time.year
+             return this.$store.state.time.time.year
          },
          month() {
-             return this.$store.state.time.month
+             return this.$store.state.time.time.month
          },
          day() {
-             return this.$store.state.time.day
+             return this.$store.state.time.time.day
          },
          hour() {
-             return this.$store.state.time.hour
+             return this.$store.state.time.time.hour
          },
          minute() {
-             return this.$store.state.time.minute
+             return this.$store.state.time.time.minute
          },
          second() {
-             return this.$store.state.time.second
+             return this.$store.state.time.time.second
          },
          timeStr() {
-             return this.$store.state.time
+             return this.$store.state.time.time
          }
      }
  }

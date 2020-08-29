@@ -15,13 +15,13 @@
      name: 'Quote',
      computed: {
          text() {
-             return this.$store.state.quote.text
+             return this.$store.state.quote.quote.text
          },
          title() {
-             return this.$store.state.quote.title
+             return this.$store.state.quote.quote.title
          },
          author() {
-             return this.$store.state.quote.author
+             return this.$store.state.quote.quote.author
          }
      }
  }

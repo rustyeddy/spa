@@ -5,9 +5,16 @@ import (
 	"net/http"
 )
 
+var (
+	home Home
+)
+
+type Home struct {
+}
+
 // handleHome returns the html of our home page to the person making
 // the request.
-func handleHome(w http.ResponseWriter, r *http.Request) {
+func (h Home) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	index := defaultIndex()
 	fmt.Fprint(w, index)

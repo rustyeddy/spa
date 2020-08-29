@@ -77,7 +77,6 @@ func (q Quote) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 
 		log.Println("Sending the quote to Websocket")
-
 		for _, cb := range quoteCallbacks {
 			cb(theQuote)
 		}

@@ -10,7 +10,7 @@ func web(addr, path string) {
 	// if our path is null we will return our in memory static
 	// website!
 	if path == "" {
-		http.HandleFunc("/", handleHome)
+		http.Handle("/", home)
 	} else {
 		http.Handle("/", http.FileServer(http.Dir(path)))
 	}

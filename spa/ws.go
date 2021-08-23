@@ -27,7 +27,6 @@ func (ws wsServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	c, err := websocket.Accept(w, r, &websocket.AcceptOptions{
 		Subprotocols:       []string{"echo"},
 		InsecureSkipVerify: true, // Take care of CORS
-		// OriginPatterns: ["*"],
 	})
 	if err != nil {
 		log.Println("ERROR ", err)

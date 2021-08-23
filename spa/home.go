@@ -30,8 +30,8 @@ func defaultIndex() string {
     <title>Static</title>
   </head>
   <body>
-    <h1>Hello, World!</h1>
-    <p>This is a static page from memory.</p>
+    <h1>Hello, Static Website!</h1>
+    <p>This is a static page straight from memory.</p>
   </body>
 </html>`
 	return str

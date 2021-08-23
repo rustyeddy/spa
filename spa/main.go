@@ -17,8 +17,8 @@ var (
 
 func init() {
 	flag.BoolVar(&config.Debug, "debug", false, "turn on debugging")
-	flag.StringVar(&config.Addr, "addr", ":1233", "address string to serve up")
-	flag.StringVar(&config.Pub, "pub", "", "path of website to serve up")
+	flag.StringVar(&config.Addr, "addr", ":8080", "address string to serve up")
+	flag.StringVar(&config.Pub, "pub", "www", "path of website to serve up")
 }
 
 func main() {

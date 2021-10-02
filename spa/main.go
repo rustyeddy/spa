@@ -41,14 +41,10 @@ func main() {
 		log.Println("HTML directory has been set to ", config.Pub)
 	}
 
-
-
 	addRoutes()
 
-	// Let the world know we are alive
-	log.Println("Web starting at", config.Addr)
-	// Go web! Found in web.go
-	log.Println("start web pages at: ", config.Pub)
+	log.Println("Web server at", config.Addr)
+	log.Println("Web pages from: ", config.Pub)
 	srv.Run(config.Addr, config.Pub)
 }
 

@@ -1,12 +1,8 @@
-package main
+package handlers
 
 import (
 	"encoding/json"
 	"net/http"
-)
-
-var (
-	health Health = Health{true}
 )
 
 type Health struct {

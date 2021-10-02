@@ -1,8 +1,9 @@
-# spa - The Single Page App Server
+# spa - The Single Page Application Server
 
-spa was built to server up Single Page Applications (SPA) on small
-embedded devices, for example works great serving up dashboards on
-devices controlled by a Raspberry PI.
+**spa** was built to server up _Single Page Applications (SPA)_ particulary
+for microservices and embedded devices. For example, _spa_ works great
+serving up backends from Google's _AppEngine_ or serving dashboards from
+devices controlled by a Raspberry PI. 
 
 ## Build
 
